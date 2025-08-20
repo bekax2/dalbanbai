@@ -1,0 +1,242 @@
+# dalbanbai
+dalbanbai anime site
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>хстшники — Anime Portal</title>
+  <meta name="description" content="хстшники — фан-портал: One Piece, Naruto, Bleach. Описания, эпизоды, новости. Все ссылки ведут на официальные источники." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#ff6b6b;--accent2:#6b9cff;--muted:#9aa7bd;--glass:rgba(255,255,255,0.03);color-scheme:dark}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#071022,#0f1724);color:#e6eef8}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo svg{width:46px;height:46px}
+    h1{font-size:18px;margin:0}
+    .tag{color:var(--muted);font-size:13px}
+    nav a{color:var(--muted);margin-left:12px;text-decoration:none;font-weight:600}
+    .hero{display:flex;gap:20px;align-items:center;margin-top:18px}
+    .hero .left{flex:1}
+    .hero h2{margin:0 0 8px;font-size:28px}
+    .hero p{color:var(--muted);margin:0}
+    .search{margin-top:12px;display:flex;gap:8px}
+    .search input{flex:1;padding:12px;border-radius:10px;border:0;background:var(--card);color:inherit}
+    .search button{padding:12px;border-radius:10px;border:0;background:var(--accent);color:#081225;font-weight:700}
+
+    .notice{margin-top:14px;padding:12px;border-radius:10px;background:linear-gradient(90deg,rgba(107,156,255,0.06),rgba(255,107,107,0.04));color:var(--muted);font-size:13px}
+
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px;margin-top:20px}
+    .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .show-list{display:grid;gap:12px}
+    .show{display:flex;gap:12px;align-items:center}
+    .thumb{width:110px;height:62px;border-radius:8px;background:linear-gradient(90deg,#253656,#192536);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+    .meta h3{margin:0;font-size:16px}
+    .meta p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .btn{padding:8px 10px;border-radius:8px;border:0;font-weight:700;cursor:pointer}
+    .btn.play{background:var(--accent2);color:#061029}
+    .btn.info{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    .episodes{margin-top:12px;display:grid;gap:8px}
+    .ep{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+    .ep small{color:var(--muted)}
+
+    aside .widget{margin-bottom:12px}
+    .footer{color:var(--muted);font-size:13px;margin-top:18px;text-align:center}
+
+    @media (max-width:900px){.grid{grid-template-columns:1fr}.thumb{width:92px;height:52px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <rect rx="18" width="100" height="100" fill="#6b9cff"/>
+          <text x="50%" y="56%" text-anchor="middle" font-family="Inter" font-size="30" font-weight="800" fill="#071022">хст</text>
+        </svg>
+        <div>
+          <h1>хстшники</h1>
+          <div class="tag">Anime portal — One Piece, Naruto, Bleach (фаны)</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#shows">Сериалы</a>
+        <a href="#news">Новости</a>
+        <a href="#contact">Контакт</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="left">
+        <h2>Портал аниме-сообщества</h2>
+        <p class="tag">Описания эпизодов, персонажей, новости и ссылки на официальные источники. Мы не храним видео.</p>
+
+        <div class="search" style="margin-top:12px">
+          <input id="q" placeholder="Поиск по названию сериала, эпизоду или персонажу..." />
+          <button onclick="doSearch()">Поиск</button>
+        </div>
+
+        <div class="notice">
+          <strong>Важное:</strong> сайт не хостит и не распространяет пиратский контент. Кнопка «Смотреть» ведёт на внешние официальные сервисы — замените ссылки на легальные источники.
+        </div>
+      </div>
+    </section>
+
+    <div class="grid" id="shows">
+      <main>
+        <div class="card">
+          <h3>Сериалы</h3>
+          <div class="show-list" id="showList">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px" id="episodesCard">
+          <h3 id="epTitle">Выберите сериал →</h3>
+          <div class="episodes" id="episodes"></div>
+        </div>
+
+        <div class="card" id="news" style="margin-top:12px">
+          <h3>Новости</h3>
+          <ul id="newsList" style="padding-left:18px;color:var(--muted)">
+            <li>Здесь будут последние новости сериалов и релизов.</li>
+          </ul>
+        </div>
+      </main>
+
+      <aside>
+        <div class="card widget">
+          <h4>О нас</h4>
+          <p class="tag">Фан-портал. Все ссылки ведут на официальные стриминги и сайты правообладателей.</p>
+        </div>
+
+        <div class="card widget">
+          <h4>Рекомендации</h4>
+          <p class="tag">Добавь официальные реферальные ссылки на Crunchyroll / Netflix / Amazon — можно монетизировать.</p>
+        </div>
+
+        <div class="card widget">
+          <h4 id="contact">Контакт</h4>
+          <p class="tag">Для сотрудничества: оставь сообщение в WhatsApp или Email.</p>
+          <p style="margin-top:8px"><a class="btn info" href="mailto:you@example.com">Email</a></p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">
+      © хстшники — фан-портал. Мы не храним видео. Замените внешние ссылки на официальные источники.
+    </div>
+  </div>
+
+  <script>
+    // Sample data — заменяй officialLink на реальные каналы/плейлисты/партнёрские ссылки
+    const SHOWS = [
+      {
+        id:'onepiece',
+        title:'One Piece',
+        short:'Пираты, приключения, король пиратов',
+        thumbnail:'OP',
+        episodes: [
+          {s:1,e:1,title:'Romance Dawn', officialLink:'https://official.example/onepiece/s1e1'},
+          {s:1,e:2,title:'They Call Him "Straw Hat Luffy"', officialLink:'https://official.example/onepiece/s1e2'}
+        ]
+      },
+      {
+        id:'naruto',
+        title:'Naruto',
+        short:'Ниндзя, дружба, приключения',
+        thumbnail:'NA',
+        episodes: [
+          {s:1,e:1,title:'Uzumaki Naruto', officialLink:'https://official.example/naruto/s1e1'},
+          {s:1,e:2,title:'The Hokage', officialLink:'https://official.example/naruto/s1e2'}
+        ]
+      },
+      {
+        id:'bleach',
+        title:'Bleach',
+        short:'Сёгун-шинигами и сверхъестественное',
+        thumbnail:'BL',
+        episodes: [
+          {s:1,e:1,title:'The Day I Became a Shinigami', officialLink:'https://official.example/bleach/s1e1'},
+          {s:1,e:2,title:'A Shinigami’s Work', officialLink:'https://official.example/bleach/s1e2'}
+        ]
+      }
+    ];
+
+    const showListEl = document.getElementById('showList');
+    const episodesEl = document.getElementById('episodes');
+    const epTitle = document.getElementById('epTitle');
+
+    function renderShows(list){
+      showListEl.innerHTML = '';
+      list.forEach(s=>{
+        const el = document.createElement('div');
+        el.className = 'show card';
+        el.innerHTML = `
+          <div class="thumb">${s.thumbnail}</div>
+          <div class="meta">
+            <h3>${s.title}</h3>
+            <p>${s.short}</p>
+            <div style="margin-top:8px">
+              <button class="btn play" onclick="openShow('${s.id}')">Открыть</button>
+              <button class="btn info" onclick="showInfo('${s.id}')">Инфо</button>
+            </div>
+          </div>
+        `;
+        showListEl.appendChild(el);
+      });
+    }
+
+    function openShow(id){
+      const s = SHOWS.find(x=>x.id===id);
+      if(!s) return;
+      epTitle.textContent = `${s.title} — эпизоды`;
+      episodesEl.innerHTML = '';
+      s.episodes.forEach(ep=>{
+        const row = document.createElement('div');
+        row.className = 'ep';
+        row.innerHTML = `
+          <div>
+            <strong>S${ep.s}E${ep.e}</strong> — ${ep.title} <br><small class="tag">Описание: краткое описание эпизода...</small>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn play" onclick="watch('${encodeURI(ep.officialLink)}')">Смотреть</button>
+            <button class="btn info" onclick="report('${s.id}', ${ep.s}, ${ep.e})">Сообщить</button>
+          </div>
+        `;
+        episodesEl.appendChild(row);
+      });
+      window.scrollTo({top:document.getElementById('episodesCard').offsetTop-20, behavior:'smooth'});
+    }
+
+    function showInfo(id){
+      const s = SHOWS.find(x=>x.id===id);
+      alert(`${s.title}\n\n${s.short}\nЭпизодов: ${s.episodes.length}\n\nЗамените ссылки на официальные источники.`);
+    }
+
+    function watch(url){
+      // Открываем внешнюю официальную ссылку в новой вкладке
+      if(!url || url==='') { alert('Ссылка отсутствует — добавьте официальный источник.'); return; }
+      window.open(decodeURI(url), '_blank', 'noopener');
+    }
+
+    function report(showId, s, e){
+      alert('Спасибо. Если этот эпизод содержит нелегальный контент, мы проверим и удалим ссылки.'); // placeholder
+    }
+
+    function doSearch(){
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      if(!q){ renderShows(SHOWS); return; }
+      const filtered = SHOWS.filter(s => s.title.toLowerCase().includes(q) || s.short.toLowerCase().includes(q) ||
+        s.episodes.some(ep=>ep.title.toLowerCase().includes(q)));
+      renderShows(filtered);
+    }
+
+    // initial render
+    renderShows(SHOWS);
+  </script>
+</body>
+</html>

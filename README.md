@@ -1,2 +1,0 @@
-# dalbanbai
-dalbanbai anime site
